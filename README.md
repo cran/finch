@@ -6,6 +6,7 @@ finch
 [![Build Status](https://api.travis-ci.org/ropensci/finch.png)](https://travis-ci.org/ropensci/finch)
 [![Build status](https://ci.appveyor.com/api/projects/status/rsjg02cbwfbujxn0?svg=true)](https://ci.appveyor.com/project/sckott/finch)
 [![codecov.io](https://codecov.io/github/ropensci/finch/coverage.svg?branch=master)](https://codecov.io/github/ropensci/finch?branch=master)
+[![cran version](http://www.r-pkg.org/badges/version/finch)](https://cran.r-project.org/package=finch)
 
 `finch` parses Darwin Core simple and archive files
 
@@ -127,15 +128,15 @@ List files in the archive
 ```r
 out$files
 #> $xml_files
-#> [1] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/meta.xml"    
-#> [2] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/metadata.xml"
+#> [1] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/meta.xml"    
+#> [2] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/metadata.xml"
 #> 
 #> $txt_files
-#> [1] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/citations.txt" 
-#> [2] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/multimedia.txt"
-#> [3] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/occurrence.txt"
-#> [4] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/rights.txt"    
-#> [5] "/Library/Frameworks/R.framework/Versions/3.3/Resources/library/finch/examples/0000154-150116162929234/verbatim.txt"  
+#> [1] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/citations.txt" 
+#> [2] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/multimedia.txt"
+#> [3] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/occurrence.txt"
+#> [4] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/rights.txt"    
+#> [5] "/Users/sckott/Library/Caches/R/finch/0000154-150116162929234/verbatim.txt"  
 ...
 ```
 
@@ -210,6 +211,6 @@ You can also give `dwca()` a local directory, or url that contains a Darwin Core
 * Please [report any issues or bugs](https://github.com/ropensci/finch/issues).
 * License: MIT
 * Get citation information for `finch` in R doing `citation(package = 'finch')`
-* Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+* Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 [![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

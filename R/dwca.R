@@ -4,12 +4,12 @@
 #'
 #' @param input (character) Path to local zip file, directory, or a url.
 #' If a URL it must be for a zip file.
-#' @param read (logical) Whether or not to read in data files. If \code{FALSE},
-#' we give back paths to files only. Default: \code{FALSE}
-#' @param ... Further args passed on to \code{\link[data.table]{fread}}
+#' @param read (logical) Whether or not to read in data files. If `FALSE`,
+#' we give back paths to files only. Default: `FALSE`
+#' @param ... Further args passed on to [data.table::fread()]
 #'
 #' @details
-#' Note that sometimes file reads fail. We use \code{\link[data.table]{fread}}
+#' Note that sometimes file reads fail. We use [data.table::fread()]
 #' internally, which is very fast, but can fail sometimes. If so, try reading
 #' in the data manually.
 #'
@@ -19,6 +19,10 @@
 #' won't invoke the caching route, but will go directly to the file/directory.
 #'
 #' @examples
+#' \dontrun{
+#' # set up a temporary directory for the example
+#' dwca_cache$cache_path_set(path = "finch", type = "tempdir")
+#' 
 #' dir <- system.file("examples", "0000154-150116162929234", package = "finch")
 #'
 #' # Don't read data in
@@ -28,7 +32,6 @@
 #' x$dataset_meta[[1]]
 #' x$data
 #'
-#' \dontrun{
 #' # Read data
 #' (x <- dwca_read(dir, read=TRUE))
 #' head(x$data[[1]])
@@ -65,7 +68,7 @@ dwca_read <- function(input, read = FALSE, ...){
   # get datasets metadata
   dataset_meta <- lapply(files$datasets_meta, EML::read_eml)
   # get data
-  datout <- read_data(files$data_paths, read)
+  datout <- read_data(files$data_paths, read, ...)
 
   structure(list(files = files,
                  highmeta = highmeta,
@@ -171,11 +174,11 @@ data_paths <- function(x){
   file.path(basedir, xml_text(xml_find_all(meta, "//files/location")))
 }
 
-read_data <- function(x, read){
+read_data <- function(x, read, ...){
   if ( read ) {
     datout <- list()
     for (i in seq_along(x)) {
-      datout[[basename(x[[i]])]] <- try_read(x[[i]])
+      datout[[basename(x[[i]])]] <- try_read(x[[i]], ...)
     }
     datout
   } else {
@@ -183,11 +186,11 @@ read_data <- function(x, read){
   }
 }
 
-try_read <- function(z){
+try_read <- function(z, ...){
   res <- tryCatch(
     suppressWarnings(
       data.table::fread(z, stringsAsFactors = FALSE, data.table = FALSE,
-                        sep = "\t", quote = "")
+                        sep = "\t", quote = "", ...)
     ), error = function(e) e
   )
   if ( inherits(res, "simpleError") ) {
@@ -202,9 +205,16 @@ process <- function(x){
     attr(x, "type"),
     dir = x,
     file = {
-      dirpath <- sub("\\.zip", "", x[[1]])
-      utils::unzip(x, exdir = dirpath)
-      dirpath
+      dwca_cache$mkdir()
+      dirpath <- file.path(dwca_cache$cache_path_get(), 
+        basename(sub("\\.zip", "", x[[1]])))
+      if (file.exists(dirpath)) {
+        message("File in cache")
+        return(dirpath)
+      } else {
+        utils::unzip(x, exdir = dirpath)
+        return(dirpath)
+      }
     },
     url = dwca_cache_get(x)
   )
@@ -213,15 +223,15 @@ process <- function(x){
 dwca_cache_get <- function(url) {
   sha <- digest::digest(url, algo = "sha1")
   key <- paste0(sha, ".zip")
-  fpath <- file.path(finch_cache(), key)
+  fpath <- file.path(dwca_cache$cache_path_get(), key)
   dirpath <- sub("\\.zip", "", fpath)
   if (file.exists(dirpath)) {
     message("File in cache")
     return(dirpath)
   } else {
     on.exit(unlink(fpath))
-    dir.create(finch_cache(), showWarnings = FALSE, recursive = TRUE)
-    utils::download.file(url = url, destfile = fpath, quiet = FALSE)
+    dwca_cache$mkdir()
+    utils::download.file(url = url, destfile = fpath, quiet = FALSE, mode = "wb")
     utils::unzip(fpath, exdir = dirpath)
     return(dirpath)
   }
