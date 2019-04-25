@@ -1,7 +1,7 @@
 context("dwca_get")
 
 # set up a temporary directory for tests
-dwca_cache$cache_path_set(path = "finch", type = "tempdir")
+invisible(dwca_cache$cache_path_set(path = "finch", type = "tempdir"))
  
 
 test_that("dwca_get - works with a directory - read=FALSE", {
@@ -15,7 +15,7 @@ test_that("dwca_get - works with a directory - read=FALSE", {
   expect_is(aa$files, 'list')
   expect_is(aa$highmeta, 'list')
   expect_is(aa$highmeta$occurrence.txt, 'data.frame')
-  expect_is(aa$emlmeta, 'eml')
+  expect_is(aa$emlmeta, 'emld')
   expect_is(aa$data, 'character')
 })
 
@@ -30,7 +30,7 @@ test_that("dwca_get - works with a zip file - read=FALSE", {
   expect_is(aa$files, 'list')
   expect_is(aa$highmeta, 'list')
   expect_is(aa$highmeta$occurrence.txt, 'data.frame')
-  expect_is(aa$emlmeta, 'eml')
+  expect_is(aa$emlmeta, 'emld')
   expect_is(aa$data, 'character')
 })
 
@@ -48,7 +48,7 @@ test_that("dwca_get - works with a url - read=FALSE", {
   expect_is(aa$files, 'list')
   expect_is(aa$highmeta, 'list')
   expect_is(aa$highmeta$taxon.txt, 'data.frame')
-  expect_is(aa$emlmeta, 'eml')
+  expect_is(aa$emlmeta, 'emld')
   expect_is(aa$data, 'character')
   expect_null(names(aa$data))
 

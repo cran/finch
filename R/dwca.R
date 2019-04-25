@@ -152,7 +152,7 @@ print.dwca_gbif <- function(x, ...){
 
 cmeta <- function(y) {
   if ( !is.null(y$emlmeta) ) {
-    y$emlmeta@packageId
+    y$emlmeta$packageId
   } else {
     NULL
   }
@@ -231,7 +231,7 @@ dwca_cache_get <- function(url) {
   } else {
     on.exit(unlink(fpath))
     dwca_cache$mkdir()
-    utils::download.file(url = url, destfile = fpath, quiet = FALSE, mode = "wb")
+    utils::download.file(url = url, destfile = fpath, quiet = TRUE, mode = "wb")
     utils::unzip(fpath, exdir = dirpath)
     return(dirpath)
   }
